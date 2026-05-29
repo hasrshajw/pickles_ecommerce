@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mutton Pickle – Detail</title>
-    <!-- IBM Plex Sans & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -444,16 +443,21 @@
             flex-shrink: 0;
         }
 
-        /* ----- FEATURES SECTION (5 ITEMS) ----- */
+        /* ----- FEATURES SECTION ----- */
         .features-section {
             margin-top: 8px;
-            margin-bottom: 4px;
+            margin-bottom: 0; /* ← was 4px, removed bottom margin */
         }
 
         .feature-line {
             border: none;
             border-top: 1px solid #e0e0e0;
             margin: 14px 0;
+        }
+
+        /* ← KEY FIX: last hr inside features-section has no bottom margin */
+        .features-section .feature-line:last-of-type {
+            margin-bottom: 0;
         }
 
         .feature-items {
@@ -486,6 +490,61 @@
         .feature-item span {
             font-weight: 500;
             line-height: 1.2;
+        }
+
+        /* ----- SHIPPING & RETURNS COLLAPSIBLE ----- */
+        .shipping-returns-section {
+            margin-top: 0; /* ← was 4px, now 0 */
+        }
+
+        .sr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 6px 0;
+            font-weight: 600;
+            font-size: 16px;
+            color: #111;
+            user-select: none;
+        }
+
+        .sr-header .arrow-icon {
+            transition: transform 0.3s ease;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .sr-header.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .sr-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 0;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .sr-content.open {
+            max-height: 200px;
+            padding-bottom: 8px;
+        }
+
+        .sr-content p {
+            margin-bottom: 8px;
+        }
+
+        .sr-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .shipping-returns-section .feature-line {
+            margin-top: 6px;
+            margin-bottom: 6px;
         }
 
         /* ========== MOBILE RESPONSIVENESS ========== */
@@ -594,7 +653,6 @@
                 font-size: 28px;
             }
 
-            /* Feature items remain flex row on mobile, wrap allowed */
             .feature-items {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -608,14 +666,16 @@
             .feature-item i {
                 font-size: 20px;
             }
+
+            .sr-header {
+                font-size: 15px;
+            }
         }
 
-        /* Narrow mobile: hide the 5th feature so all fit in one row */
         @media (max-width: 500px) {
             .feature-item:nth-child(5) {
                 display: none;
             }
-            /* Make the remaining 4 items fill the row nicely */
             .feature-items {
                 flex-wrap: nowrap;
                 justify-content: space-around;
@@ -760,7 +820,7 @@
                     Buy Now
                 </button>
 
-                <!-- FEATURES – 5th hidden on very narrow screens -->
+                <!-- FEATURES -->
                 <div class="features-section">
                     <hr class="feature-line">
                     <div class="feature-items">
@@ -784,6 +844,19 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>Secure Packaging</span>
                         </div>
+                    </div>
+                    <hr class="feature-line">
+                </div>
+
+                <!-- SHIPPING & RETURNS COLLAPSIBLE -->
+                <div class="shipping-returns-section">
+                    <div class="sr-header" id="shippingReturnsToggle">
+                        <span>Shipping &amp; Returns</span>
+                        <i class="fas fa-chevron-down arrow-icon"></i>
+                    </div>
+                    <div class="sr-content" id="shippingReturnsContent">
+                        <p><strong>Shipping:</strong> We offer free standard shipping on all orders over ₹999. Orders are typically processed within 24-48 hours.</p>
+                        <p><strong>Returns:</strong> We accept returns within 7 days of delivery for unworn, unwashed items with original tags attached.</p>
                     </div>
                     <hr class="feature-line">
                 </div>
@@ -945,6 +1018,16 @@
                     }
                     i = j + 1;
                 }
+            }
+
+            // Shipping & Returns toggle
+            const srToggle = document.getElementById('shippingReturnsToggle');
+            const srContent = document.getElementById('shippingReturnsContent');
+            if (srToggle && srContent) {
+                srToggle.addEventListener('click', function() {
+                    this.classList.toggle('open');
+                    srContent.classList.toggle('open');
+                });
             }
 
             window.addEventListener('load', () => {
