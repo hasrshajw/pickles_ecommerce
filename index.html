@@ -231,7 +231,6 @@
             border-radius: 40px;
             border: 1px solid #f5c2c2;
         }
-        /* Hide elements when no variant selected */
         .old-price.hidden,
         .discount-badge.hidden {
             display: none;
@@ -250,7 +249,7 @@
             color: #111;
         }
 
-        /* ----- VARIANT GRID (UNIVERSAL FLEX) ----- */
+        /* ----- VARIANT GRID ----- */
         .variant-grid {
             display: flex;
             flex-wrap: wrap;
@@ -436,7 +435,6 @@
             font-size: 18px;
         }
 
-        /* ----- UPI ICON IN BUY NOW BUTTON ----- */
         .upi-icon {
             height: 22px;
             width: auto;
@@ -444,6 +442,55 @@
             object-fit: contain;
             vertical-align: middle;
             flex-shrink: 0;
+        }
+
+        /* ----- FEATURES SECTION (5 ITEMS, 4TH HIDDEN ON MOBILE) ----- */
+        .features-section {
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+
+        .feature-line {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 14px 0;
+        }
+
+        .feature-items {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px 8px;
+            text-align: center;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #444;
+            flex: 1 1 auto;
+            min-width: 60px;
+            max-width: 100px;
+        }
+
+        .feature-item i {
+            font-size: 22px;
+            color: #E61D26;
+            opacity: 0.9;
+        }
+
+        .feature-item span {
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        /* Class to hide on mobile */
+        .hide-mobile {
+            /* visible on desktop by default */
         }
 
         /* ========== MOBILE ========== */
@@ -532,7 +579,6 @@
                 flex: 1;
             }
 
-            /* ✅ INCREASED BUTTON HEIGHTS ON MOBILE */
             .btn {
                 padding: 18px 16px;
                 font-size: 16px;
@@ -556,6 +602,21 @@
             .current-price {
                 font-size: 28px;
             }
+            .feature-item i {
+                font-size: 20px;
+            }
+            .feature-item span {
+                font-size: 12px;
+            }
+            .feature-item {
+                min-width: 50px;
+                max-width: 80px;
+            }
+
+            /* Hide 4th feature item on mobile */
+            .feature-item.hide-mobile {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -569,7 +630,6 @@
                 font-size: 26px;
             }
 
-            /* ✅ FURTHER INCREASED BUTTON HEIGHTS */
             .btn {
                 padding: 16px 14px;
                 font-size: 15px;
@@ -594,6 +654,21 @@
             .qty-value {
                 width: 36px;
                 font-size: 15px;
+            }
+            .feature-item i {
+                font-size: 19px;
+            }
+            .feature-item span {
+                font-size: 11px;
+            }
+            .feature-item {
+                min-width: 45px;
+                max-width: 70px;
+            }
+
+            /* Keep hidden on small screens too */
+            .feature-item.hide-mobile {
+                display: none;
             }
         }
     </style>
@@ -640,7 +715,6 @@
 
             <div class="variant-header">Select Size</div>
             <div class="variant-grid" id="variantGrid">
-                <!-- No default active class -->
                 <div class="variant-box" data-price="299" data-old="399" data-discount="25" data-label="250g">
                     <div class="variant-title">250g</div>
                     <div class="price-small">₹299 <span class="old">₹399</span> <span class="discount">25%</span></div>
@@ -685,6 +759,34 @@
                     class="upi-icon">
                     Buy Now
                 </button>
+
+                <!-- FIVE FEATURES SECTION, 4TH HIDDEN ON MOBILE -->
+                <div class="features-section">
+                    <hr class="feature-line">
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <i class="fas fa-gem"></i>
+                            <span>Premium Quality</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>No Preservatives</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-truck-fast"></i>
+                            <span>Fast Delivery</span>
+                        </div>
+                        <div class="feature-item hide-mobile">
+                            <i class="fas fa-mortar-pestle"></i>
+                            <span>Traditional Recipe</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure Packaging</span>
+                        </div>
+                    </div>
+                    <hr class="feature-line">
+                </div>
             </div>
         </div>
     </div>
@@ -696,15 +798,12 @@
             const oldPriceEl = document.getElementById('oldPrice');
             const discountBadge = document.getElementById('discountBadge');
 
-            // Helper to format price in Indian numbering
             const formatPrice = (val) => parseInt(val).toLocaleString('en-IN');
 
-            // Function to update price display based on active variant or range
             function updatePriceDisplay() {
                 const activeBox = document.querySelector('.variant-box.active');
 
                 if (activeBox) {
-                    // Show selected variant price
                     const price = activeBox.dataset.price;
                     const old = activeBox.dataset.old;
                     const discount = activeBox.dataset.discount;
@@ -714,10 +813,8 @@
                     oldPriceEl.classList.remove('hidden');
                     discountBadge.classList.remove('hidden');
                 } else {
-                    // No variant selected: show range from first to last variant
                     const allBoxes = Array.from(variantBoxes);
                     if (allBoxes.length === 0) return;
-
                     const firstPrice = allBoxes[0].dataset.price;
                     const lastPrice = allBoxes[allBoxes.length - 1].dataset.price;
                     currentPriceEl.textContent = `₹${formatPrice(firstPrice)} – ₹${formatPrice(lastPrice)}`;
@@ -726,17 +823,14 @@
                 }
             }
 
-            // Variant click handler
             variantBoxes.forEach(box => {
                 box.addEventListener('click', function() {
-                    // Remove active from all, then add to clicked
                     variantBoxes.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     updatePriceDisplay();
                 });
             });
 
-            // Quantity controls
             const qtyValue = document.getElementById('qtyValue');
             const qtyMinus = document.getElementById('qtyMinus');
             const qtyPlus = document.getElementById('qtyPlus');
@@ -751,7 +845,7 @@
             qtyMinus.addEventListener('click', () => updateQuantity(-1));
             qtyPlus.addEventListener('click', () => updateQuantity(1));
 
-            // Thumbnail gallery logic (unchanged)
+            // Thumbnail gallery
             const thumbItems = document.querySelectorAll('.thumb-item');
             const mainImage = document.getElementById('mainImage');
             const thumbContainer = document.getElementById('thumbnailsContainer');
@@ -786,12 +880,10 @@
                 item.addEventListener('click', () => setActiveThumb(index));
             });
             thumbUp.addEventListener('click', () => {
-                let newIndex = Math.max(0, currentIndex - 1);
-                setActiveThumb(newIndex);
+                setActiveThumb(Math.max(0, currentIndex - 1));
             });
             thumbDown.addEventListener('click', () => {
-                let newIndex = Math.min(thumbItems.length - 1, currentIndex + 1);
-                setActiveThumb(newIndex);
+                setActiveThumb(Math.min(thumbItems.length - 1, currentIndex + 1));
             });
             thumbContainer.addEventListener('scroll', () => {
                 const thumbHeight = 80;
@@ -820,8 +912,7 @@
                 const diff = touchStartX - touchEndX;
                 if (Math.abs(diff) > 50) {
                     if (diff > 0) {
-                        let nextIndex = (currentIndex + 1) % thumbImages.length;
-                        setActiveThumb(nextIndex);
+                        setActiveThumb((currentIndex + 1) % thumbImages.length);
                     } else {
                         let prevIndex = currentIndex - 1;
                         if (prevIndex < 0) prevIndex = thumbImages.length - 1;
@@ -838,7 +929,6 @@
                 updateVariantLayout();
             });
 
-            // Variant grid layout fix
             function updateVariantLayout() {
                 const grid = document.getElementById('variantGrid');
                 const boxes = grid.querySelectorAll('.variant-box');
@@ -859,7 +949,6 @@
 
             window.addEventListener('load', () => {
                 updateVariantLayout();
-                // Initialize price display to range (no active variant)
                 updatePriceDisplay();
             });
             window.addEventListener('resize', updateVariantLayout);
@@ -868,7 +957,6 @@
                     setTimeout(updateVariantLayout, 100);
                 });
             });
-
         })();
     </script>
 </body>
