@@ -444,7 +444,7 @@
             flex-shrink: 0;
         }
 
-        /* ----- FEATURES SECTION (5 ITEMS, 4TH HIDDEN ON MOBILE) ----- */
+        /* ----- FEATURES SECTION (5 ITEMS) ----- */
         .features-section {
             margin-top: 8px;
             margin-bottom: 4px;
@@ -488,12 +488,7 @@
             line-height: 1.2;
         }
 
-        /* Class to hide on mobile */
-        .hide-mobile {
-            /* visible on desktop by default */
-        }
-
-        /* ========== MOBILE ========== */
+        /* ========== MOBILE RESPONSIVENESS ========== */
         @media (max-width: 800px) {
             .container {
                 flex-direction: column;
@@ -526,25 +521,21 @@
             .variant-grid {
                 gap: 6px;
             }
-
             .variant-box {
                 padding: 6px 10px;
                 min-width: 60px;
                 flex: 1 0 auto;
             }
-
             .variant-box.single-row {
                 flex: 0 1 auto;
                 width: fit-content;
                 min-width: 60px;
                 max-width: 200px;
             }
-
             .variant-box.single-row .price-small,
             .variant-box.single-row .variant-title {
                 white-space: normal;
             }
-
             .variant-title {
                 font-size: 13px;
             }
@@ -602,20 +593,44 @@
             .current-price {
                 font-size: 28px;
             }
+
+            /* Feature items remain flex row on mobile, wrap allowed */
+            .feature-items {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .feature-item {
+                flex: 1 1 auto;
+                min-width: 60px;
+                max-width: 90px;
+                font-size: 12px;
+            }
             .feature-item i {
                 font-size: 20px;
             }
-            .feature-item span {
-                font-size: 12px;
+        }
+
+        /* Narrow mobile: hide the 5th feature so all fit in one row */
+        @media (max-width: 500px) {
+            .feature-item:nth-child(5) {
+                display: none;
+            }
+            /* Make the remaining 4 items fill the row nicely */
+            .feature-items {
+                flex-wrap: nowrap;
+                justify-content: space-around;
             }
             .feature-item {
-                min-width: 50px;
-                max-width: 80px;
+                flex: 1 1 0;
+                min-width: 0;
+                max-width: none;
+                padding: 0 2px;
             }
-
-            /* Hide 4th feature item on mobile */
-            .feature-item.hide-mobile {
-                display: none;
+            .feature-item i {
+                font-size: 19px;
+            }
+            .feature-item span {
+                font-size: 11px;
             }
         }
 
@@ -654,21 +669,6 @@
             .qty-value {
                 width: 36px;
                 font-size: 15px;
-            }
-            .feature-item i {
-                font-size: 19px;
-            }
-            .feature-item span {
-                font-size: 11px;
-            }
-            .feature-item {
-                min-width: 45px;
-                max-width: 70px;
-            }
-
-            /* Keep hidden on small screens too */
-            .feature-item.hide-mobile {
-                display: none;
             }
         }
     </style>
@@ -760,7 +760,7 @@
                     Buy Now
                 </button>
 
-                <!-- FIVE FEATURES SECTION, 4TH HIDDEN ON MOBILE -->
+                <!-- FEATURES – 5th hidden on very narrow screens -->
                 <div class="features-section">
                     <hr class="feature-line">
                     <div class="feature-items">
@@ -776,7 +776,7 @@
                             <i class="fas fa-truck-fast"></i>
                             <span>Fast Delivery</span>
                         </div>
-                        <div class="feature-item hide-mobile">
+                        <div class="feature-item">
                             <i class="fas fa-mortar-pestle"></i>
                             <span>Traditional Recipe</span>
                         </div>
