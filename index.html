@@ -231,6 +231,11 @@
             border-radius: 40px;
             border: 1px solid #f5c2c2;
         }
+        /* Hide elements when no variant selected */
+        .old-price.hidden,
+        .discount-badge.hidden {
+            display: none;
+        }
 
         .tax-note {
             font-size: 14px;
@@ -527,7 +532,7 @@
                 flex: 1;
             }
 
-            /* ✅ INCREASED BUTTON HEIGHTS ON MOBILE (max-width: 800px) */
+            /* ✅ INCREASED BUTTON HEIGHTS ON MOBILE */
             .btn {
                 padding: 18px 16px;
                 font-size: 16px;
@@ -564,7 +569,7 @@
                 font-size: 26px;
             }
 
-            /* ✅ FURTHER INCREASED BUTTON HEIGHTS FOR SMALL SCREENS */
+            /* ✅ FURTHER INCREASED BUTTON HEIGHTS */
             .btn {
                 padding: 16px 14px;
                 font-size: 15px;
@@ -627,15 +632,16 @@
                 <span class="review-count">4.9 | 1.8K Reviews</span>
             </div>
             <div class="price-row">
-                <span class="current-price" id="currentPrice">₹299.00</span>
-                <span class="old-price" id="oldPrice">₹399.00</span>
-                <span class="discount-badge" id="discountBadge">Save 25%</span>
+                <span class="current-price" id="currentPrice">₹299 – ₹1,449</span>
+                <span class="old-price hidden" id="oldPrice">₹399.00</span>
+                <span class="discount-badge hidden" id="discountBadge">Save 25%</span>
             </div>
             <div class="tax-note">MRP Inclusive of All Taxes.</div>
 
             <div class="variant-header">Select Size</div>
             <div class="variant-grid" id="variantGrid">
-                <div class="variant-box active" data-price="299" data-old="399" data-discount="25" data-label="250g">
+                <!-- No default active class -->
+                <div class="variant-box" data-price="299" data-old="399" data-discount="25" data-label="250g">
                     <div class="variant-title">250g</div>
                     <div class="price-small">₹299 <span class="old">₹399</span> <span class="discount">25%</span></div>
                 </div>
@@ -685,28 +691,52 @@
 
     <script>
         (function() {
-            // ---------- VARIANT SELECTION ----------
             const variantBoxes = document.querySelectorAll('.variant-box');
             const currentPriceEl = document.getElementById('currentPrice');
             const oldPriceEl = document.getElementById('oldPrice');
             const discountBadge = document.getElementById('discountBadge');
 
-            function updateVariantPrices(selectedBox) {
-                variantBoxes.forEach(box => box.classList.remove('active'));
-                selectedBox.classList.add('active');
-                const price = selectedBox.dataset.price;
-                const old = selectedBox.dataset.old;
-                const discount = selectedBox.dataset.discount;
-                const formatPrice = (val) => parseInt(val).toLocaleString('en-IN');
-                currentPriceEl.textContent = `₹${formatPrice(price)}.00`;
-                oldPriceEl.textContent = `₹${formatPrice(old)}.00`;
-                discountBadge.textContent = `Save ${discount}%`;
+            // Helper to format price in Indian numbering
+            const formatPrice = (val) => parseInt(val).toLocaleString('en-IN');
+
+            // Function to update price display based on active variant or range
+            function updatePriceDisplay() {
+                const activeBox = document.querySelector('.variant-box.active');
+
+                if (activeBox) {
+                    // Show selected variant price
+                    const price = activeBox.dataset.price;
+                    const old = activeBox.dataset.old;
+                    const discount = activeBox.dataset.discount;
+                    currentPriceEl.textContent = `₹${formatPrice(price)}.00`;
+                    oldPriceEl.textContent = `₹${formatPrice(old)}.00`;
+                    discountBadge.textContent = `Save ${discount}%`;
+                    oldPriceEl.classList.remove('hidden');
+                    discountBadge.classList.remove('hidden');
+                } else {
+                    // No variant selected: show range from first to last variant
+                    const allBoxes = Array.from(variantBoxes);
+                    if (allBoxes.length === 0) return;
+
+                    const firstPrice = allBoxes[0].dataset.price;
+                    const lastPrice = allBoxes[allBoxes.length - 1].dataset.price;
+                    currentPriceEl.textContent = `₹${formatPrice(firstPrice)} – ₹${formatPrice(lastPrice)}`;
+                    oldPriceEl.classList.add('hidden');
+                    discountBadge.classList.add('hidden');
+                }
             }
+
+            // Variant click handler
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function(e) { updateVariantPrices(this); });
+                box.addEventListener('click', function() {
+                    // Remove active from all, then add to clicked
+                    variantBoxes.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    updatePriceDisplay();
+                });
             });
 
-            // ---------- QUANTITY ----------
+            // Quantity controls
             const qtyValue = document.getElementById('qtyValue');
             const qtyMinus = document.getElementById('qtyMinus');
             const qtyPlus = document.getElementById('qtyPlus');
@@ -718,10 +748,10 @@
                 if (newValue > 99) newValue = 99;
                 qtyValue.value = newValue;
             }
-            qtyMinus.addEventListener('click', function() { updateQuantity(-1); });
-            qtyPlus.addEventListener('click', function() { updateQuantity(1); });
+            qtyMinus.addEventListener('click', () => updateQuantity(-1));
+            qtyPlus.addEventListener('click', () => updateQuantity(1));
 
-            // ---------- THUMBNAIL ----------
+            // Thumbnail gallery logic (unchanged)
             const thumbItems = document.querySelectorAll('.thumb-item');
             const mainImage = document.getElementById('mainImage');
             const thumbContainer = document.getElementById('thumbnailsContainer');
@@ -738,8 +768,7 @@
             ];
             let currentIndex = 0;
             let autoRotateInterval = null;
-            let touchStartX = 0,
-                touchEndX = 0;
+            let touchStartX = 0, touchEndX = 0;
 
             function setActiveThumb(index) {
                 currentIndex = index;
@@ -754,29 +783,25 @@
                 thumbContainer.scrollTo({ top: index * thumbHeight, behavior: 'smooth' });
             }
             thumbItems.forEach((item, index) => {
-                item.addEventListener('click', function() { setActiveThumb(index); });
+                item.addEventListener('click', () => setActiveThumb(index));
             });
-            thumbUp.addEventListener('click', function() {
-                let newIndex = currentIndex - 1;
-                if (newIndex < 0) newIndex = 0;
+            thumbUp.addEventListener('click', () => {
+                let newIndex = Math.max(0, currentIndex - 1);
                 setActiveThumb(newIndex);
             });
-            thumbDown.addEventListener('click', function() {
-                let newIndex = currentIndex + 1;
-                if (newIndex >= thumbItems.length) newIndex = thumbItems.length - 1;
+            thumbDown.addEventListener('click', () => {
+                let newIndex = Math.min(thumbItems.length - 1, currentIndex + 1);
                 setActiveThumb(newIndex);
             });
-            thumbContainer.addEventListener('scroll', function() {
+            thumbContainer.addEventListener('scroll', () => {
                 const thumbHeight = 80;
                 const scrollPos = thumbContainer.scrollTop;
                 const visibleIndex = Math.round(scrollPos / thumbHeight);
-                const clampedIndex = Math.min(visibleIndex, thumbItems.length - 1);
-                thumbItems.forEach((item, i) => item.classList.toggle('active', i === clampedIndex));
+                const clamped = Math.min(visibleIndex, thumbItems.length - 1);
+                thumbItems.forEach((item, i) => item.classList.toggle('active', i === clamped));
             });
 
-            // ---------- MOBILE SWIPE & AUTO ROTATE ----------
             const wrapper = document.querySelector('.main-image-wrapper');
-
             function startAutoRotate() {
                 if (window.innerWidth <= 800) {
                     if (autoRotateInterval) clearInterval(autoRotateInterval);
@@ -786,18 +811,14 @@
                     }, 5000);
                 }
             }
-
             function stopAutoRotate() {
-                if (autoRotateInterval) { clearInterval(autoRotateInterval);
-                    autoRotateInterval = null; }
+                if (autoRotateInterval) { clearInterval(autoRotateInterval); autoRotateInterval = null; }
             }
-            wrapper.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX;
-                stopAutoRotate(); }, { passive: true });
+            wrapper.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; stopAutoRotate(); }, { passive: true });
             wrapper.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
-                const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-                if (Math.abs(diff) > swipeThreshold) {
+                if (Math.abs(diff) > 50) {
                     if (diff > 0) {
                         let nextIndex = (currentIndex + 1) % thumbImages.length;
                         setActiveThumb(nextIndex);
@@ -817,11 +838,10 @@
                 updateVariantLayout();
             });
 
-            // ---------- FIX: SINGLE CARD IN ROW (DESKTOP + MOBILE) ----------
+            // Variant grid layout fix
             function updateVariantLayout() {
                 const grid = document.getElementById('variantGrid');
                 const boxes = grid.querySelectorAll('.variant-box');
-
                 boxes.forEach(box => box.classList.remove('single-row'));
 
                 let i = 0;
@@ -837,10 +857,14 @@
                 }
             }
 
-            window.addEventListener('load', updateVariantLayout);
+            window.addEventListener('load', () => {
+                updateVariantLayout();
+                // Initialize price display to range (no active variant)
+                updatePriceDisplay();
+            });
             window.addEventListener('resize', updateVariantLayout);
             variantBoxes.forEach(box => {
-                box.addEventListener('click', function() {
+                box.addEventListener('click', () => {
                     setTimeout(updateVariantLayout, 100);
                 });
             });
