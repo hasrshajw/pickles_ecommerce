@@ -562,6 +562,8 @@
                 flex-wrap: wrap;
                 gap: 0;
                 flex-direction: column;
+                position: relative;
+                top: auto;
             }
             .thumbnails-wrapper {
                 display: none !important;
@@ -1107,6 +1109,242 @@
                 });
             }
         })();
+
     </script>
+
+    <!-- YOU MAY ALSO LIKE SECTION -->
+    <div class="also-like-section">
+        <hr class="also-like-line">
+        <h2 class="also-like-heading">You may also like</h2>
+        <div class="also-like-grid">
+
+            <!-- Card 1: Chicken Pickle -->
+            <div class="al-card">
+                <div class="al-image-wrapper">
+                    <span class="al-badge al-badge-bestseller">Best Seller</span>
+                    <img src="https://placehold.co/400x500/f8ece8/c94d2e?text=Chicken+Pickle" alt="Chicken Pickle">
+                </div>
+                <div class="al-body">
+                    <div class="al-rating">
+                        <i class="fas fa-star"></i> 4.8 <span>| 2.5K Reviews</span>
+                    </div>
+                    <div class="al-title">Authentic Andhra Chicken Pickle</div>
+                    <div class="al-price">₹299 – ₹899</div>
+                    <button class="al-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Card 2: Fish Pickle -->
+            <div class="al-card">
+                <div class="al-image-wrapper">
+                    <span class="al-badge al-badge-bestseller">Best Seller</span>
+                    <img src="https://placehold.co/400x500/f5ede8/a33e1f?text=Fish+Pickle" alt="Fish Pickle">
+                </div>
+                <div class="al-body">
+                    <div class="al-rating">
+                        <i class="fas fa-star"></i> 4.5 <span>| 3.2K Reviews</span>
+                    </div>
+                    <div class="al-title">Coastal Style Fish Pickle</div>
+                    <div class="al-price">₹349 – ₹999</div>
+                    <button class="al-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Card 3: Prawn Pickle -->
+            <div class="al-card">
+                <div class="al-image-wrapper">
+                    <span class="al-badge al-badge-spicy">Hot &amp; Tangy</span>
+                    <img src="https://placehold.co/400x500/fceee8/8f3319?text=Prawn+Pickle" alt="Prawn Pickle">
+                </div>
+                <div class="al-body">
+                    <div class="al-rating">
+                        <i class="fas fa-star"></i> 4.7 <span>| 1.1K Reviews</span>
+                    </div>
+                    <div class="al-title">Spicy Prawn Pickle with Lemon</div>
+                    <div class="al-price">₹399 – ₹1,099</div>
+                    <button class="al-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Card 4: Gongura Mutton -->
+            <div class="al-card">
+                <div class="al-image-wrapper">
+                    <span class="al-badge al-badge-spicy">Spicy</span>
+                    <img src="https://placehold.co/400x500/f9e8e0/7a2a14?text=Gongura+Mutton" alt="Gongura Mutton Pickle">
+                </div>
+                <div class="al-body">
+                    <div class="al-rating">
+                        <i class="fas fa-star"></i> 4.9 <span>| 980 Reviews</span>
+                    </div>
+                    <div class="al-title">Gongura Mutton Pickle – Andhra Special</div>
+                    <div class="al-price">₹349 – ₹1,149</div>
+                    <button class="al-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        /* ---- YOU MAY ALSO LIKE ---- */
+        .also-like-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 8px 48px 8px;
+        }
+        .also-like-line {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 36px 0 28px 0;
+        }
+        .also-like-heading {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 20px;
+            letter-spacing: -0.2px;
+        }
+        .also-like-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .al-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+        .al-card:hover {
+            transform: translateY(-4px);
+        }
+        .al-image-wrapper {
+            position: relative;
+            background: #f8f2ec;
+            aspect-ratio: 4 / 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        .al-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .al-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+        .al-badge-bestseller {
+            background: #ffe6e6;
+            color: #E61D26;
+            border: 1px solid #f5c2c2;
+        }
+        .al-badge-spicy {
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .al-body {
+            padding: 14px 14px 18px 14px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .al-rating {
+            font-size: 13px;
+            font-weight: 600;
+            color: #E61D26;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .al-rating span {
+            color: #888;
+            font-weight: 400;
+        }
+        .al-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111;
+            line-height: 1.35;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .al-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 14px;
+        }
+        .al-btn {
+            margin-top: auto;
+            width: 100%;
+            padding: 11px 12px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s ease;
+        }
+        .al-btn:hover {
+            background: #E61D26;
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+            .also-like-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .also-like-heading {
+                font-size: 18px;
+            }
+            .al-title {
+                font-size: 13px;
+            }
+            .al-price {
+                font-size: 16px;
+            }
+            .al-btn {
+                font-size: 12px;
+                padding: 10px 8px;
+            }
+        }
+        @media (max-width: 480px) {
+            .also-like-section {
+                padding: 0 4px 36px 4px;
+            }
+            .al-title {
+                font-size: 12px;
+            }
+            .al-price {
+                font-size: 15px;
+            }
+        }
+    </style>
 </body>
 </html>
